@@ -49,7 +49,7 @@ const validateSignup = [
     identifierStringValidation(
         'Name',
         'name',
-        /^[A-Za-z0-9]+$/,
+        /^[A-Za-z0-9 ]+$/,
         specialAlphaNumericErr,
     ),
 
@@ -73,15 +73,15 @@ const validateSignup = [
 
     body('role').custom(async (role, { req }) => {
         if (req.body === undefined) {
-            throw new Error('Could not validate role!');
+            throw new Error('Could not validate role');
         }
 
         const valid = await validateRole(role, req.body.key);
         if (valid === null) {
-            throw new Error('Could not validate role!');
+            throw new Error('Could not validate role');
         }
         if (valid === false) {
-            throw new Error('Invalid key!');
+            throw new Error('Invalid key');
         }
 
         return true;

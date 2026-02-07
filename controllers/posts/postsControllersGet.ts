@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 
-export async function controllerGetPosts(req: Request, res: Response) {
+export async function controllerGetOwnPosts(req: Request, res: Response) {
     const isAuthenticated = !!req.user;
 
     if (!isAuthenticated) {

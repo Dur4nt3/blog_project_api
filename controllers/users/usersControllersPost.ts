@@ -13,7 +13,10 @@ const controllerPostSignup: any = [
     async (req: Request, res: Response) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json(errors.array());
+            return res.status(400).json({
+                success: false,
+                errors: errors.array(),
+            });
         }
 
         const { username, name, password } = matchedData(req);
