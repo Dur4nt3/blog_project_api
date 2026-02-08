@@ -1,5 +1,7 @@
 import { prisma } from '../../../lib/prisma';
 
+import ROLE_POLICIES from '../../../auth/roles';
+
 // ------------ SELECT QUERIES ------------
 
 export async function getUserById(userId: number) {
@@ -8,6 +10,9 @@ export async function getUserById(userId: number) {
         user = await prisma.user.findUnique({
             where: {
                 userId,
+            },
+            include: {
+                role: true,
             },
         });
     } catch (error) {
@@ -57,6 +62,31 @@ export async function getRoleByName(name: string) {
     }
 
     return role;
+}
+
+export async function getRoleByUserId(userId: number) {
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                userId,
+            },
+            include: {
+                role: true,
+            },
+        });
+
+        if (user === null) {
+            throw new Error(`Cannot find user: ${userId}`);
+        }
+
+        return user.role.name;
+    } catch (error) {
+        console.error('------------------Logged Error------------------');
+        console.error('Error occurred when querying user by id: ', userId);
+        console.error('------------------Logged Error------------------');
+
+        return null;
+    }
 }
 
 // ------------ SELECT QUERIES ------------

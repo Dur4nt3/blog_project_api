@@ -29,9 +29,11 @@ model User {
 model Post {
   postId           Int      @id @default(autoincrement())
   title            String   @unique
+  normalizedTitle  String   @unique // Normalized version of the title, has no whitespaces and no punctuation
+  description      String
   content          String
   createdAt        DateTime @default(now())
-  lastModification DateTime
+  lastModification DateTime @default(now())
 
   userId Int
   author User @relation(fields: [userId], references: [userId])

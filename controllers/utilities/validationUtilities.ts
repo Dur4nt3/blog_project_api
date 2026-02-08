@@ -1,13 +1,17 @@
 import { body } from 'express-validator';
 
+import normalizeTitle from '../../db/utilities/normalizeTitle';
 import { isUsernameUnique } from '../../db/queries/users/usersQueriesSelect';
+import { isTitleUnique } from '../../db/queries/posts/postsQueriesSelect';
 
 import validateRole from './validateRole';
 
 const emptyErr = 'must not be empty';
-const lengthErr = 'must be between 3 and 30 characters';
 const passwordLengthErr = 'must be at least 8 characters long';
-const descLengthErr = 'must be between 3 and 50 characters';
+const titleLengthErr = 'Title must be between 10 and 70 characters';
+const bodyLengthErr = 'must be between 500 and 10000 characters';
+const titleError =
+    'Title must only includes letters, numbers, spaces and basic punctuation only';
 const alphaNumericErr =
     'must only contain letters and numbers (lowercase only)';
 const specialAlphaNumericErr = 'must only contain letters and numbers';
@@ -19,6 +23,8 @@ function identifierStringValidation(
     targetEntity: string,
     targetField: string,
     regex: RegExp,
+    minLength: number,
+    maxLength: number,
     errorVar?: string,
 ) {
     return body(targetField)
@@ -31,25 +37,33 @@ function identifierStringValidation(
             `${targetEntity} ${errorVar !== undefined ? errorVar : alphaNumericErr}`,
         )
         .bail()
-        .isLength({ min: 3, max: 30 })
-        .withMessage(`${targetEntity} ${lengthErr}`);
+        .isLength({ min: minLength, max: maxLength })
+        .withMessage(
+            `${targetEntity} must be between ${minLength} and ${maxLength} characters`,
+        );
 }
 
 const validateSignup = [
-    identifierStringValidation('Username', 'username', /^[a-z0-9]+$/).custom(
-        async (username) => {
-            const unique = await isUsernameUnique(username);
-            if (!unique) {
-                throw new Error('Username already exists');
-            }
-            return true;
-        },
-    ),
+    identifierStringValidation(
+        'Username',
+        'username',
+        /^[a-z0-9]+$/,
+        3,
+        30,
+    ).custom(async (username) => {
+        const unique = await isUsernameUnique(username);
+        if (!unique) {
+            throw new Error('Username already exists');
+        }
+        return true;
+    }),
 
     identifierStringValidation(
         'Name',
         'name',
         /^[A-Za-z0-9 ]+$/,
+        3,
+        30,
         specialAlphaNumericErr,
     ),
 
@@ -88,4 +102,45 @@ const validateSignup = [
     }),
 ];
 
-export { validateSignup };
+// /^[A-Za-z0-9.,:;?!\-"() ]+$/
+
+const validatePost = [
+    identifierStringValidation(
+        'Title',
+        'title',
+        /^[A-Za-z0-9.,:;?!\-"() ]+$/,
+        10,
+        70,
+        titleError,
+    ).custom(async (title) => {
+        const normalizedTitle = normalizeTitle(title)
+        const unique = await isTitleUnique(normalizedTitle);
+        if (unique === true) {
+            return true;
+        }
+
+        if (unique === false) {
+            throw new Error('Title already exists');
+        }
+
+        throw new Error('Could not validate title');
+    }),
+
+    identifierStringValidation(
+        'Description',
+        'description',
+        /^[A-Za-z0-9.,:;?!\-"() ]+$/,
+        100,
+        300,
+        titleError,
+    ),
+
+    body('body')
+        .notEmpty()
+        .withMessage(`Body ${emptyErr}`)
+        .bail()
+        .isLength({ min: 500, max: 10000 })
+        .withMessage(`Body ${bodyLengthErr}`),
+];
+
+export { validateSignup, validatePost };
