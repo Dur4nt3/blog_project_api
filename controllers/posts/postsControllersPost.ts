@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 
-import isUserAuthor, { assumeAuthor } from '../utilities/isUserAuthor';
+import { assumeAuthor } from '../utilities/isUserAuthor';
 
 import { matchedData, validationResult } from 'express-validator';
 import { validatePost } from '../utilities/validationUtilities';
@@ -11,12 +11,6 @@ import { insertPost } from '../../db/queries/posts/postsQueriesInsert';
 const controllerPostCreatePost: any = [
     validatePost,
     async (req: Request, res: Response) => {
-        const authCheck = await isUserAuthor(req);
-
-        if (authCheck !== true) {
-            return res.status(authCheck.status).json(authCheck.json);
-        }
-
         assumeAuthor(req);
 
         const errors = validationResult(req);
@@ -38,8 +32,6 @@ const controllerPostCreatePost: any = [
             body,
             req.user.userId,
         );
-
-        console.log(creationSuccess);
 
         if (creationSuccess !== true) {
             return res.status(500).json({

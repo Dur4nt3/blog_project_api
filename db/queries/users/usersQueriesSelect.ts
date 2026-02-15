@@ -18,6 +18,7 @@ export async function getUserById(userId: number) {
     } catch (error) {
         console.error('------------------Logged Error------------------');
         console.error('Error occurred when querying user by id: ', userId);
+        console.error(error);
         console.error('------------------Logged Error------------------');
         user = null;
     }
@@ -39,6 +40,7 @@ export async function getUserByUsername(username: string) {
             'Error occurred when querying user by username: ',
             username,
         );
+        console.error(error);
         console.error('------------------Logged Error------------------');
         user = null;
     }
@@ -56,6 +58,7 @@ export async function getRoleByName(name: string) {
         });
     } catch (error) {
         console.error('------------------Logged Error------------------');
+        console.error('Error occurred when getting role by name: ', name);
         console.error(error);
         console.error('------------------Logged Error------------------');
         return null;
@@ -83,6 +86,7 @@ export async function getRoleByUserId(userId: number) {
     } catch (error) {
         console.error('------------------Logged Error------------------');
         console.error('Error occurred when querying user by id: ', userId);
+        console.error(error);
         console.error('------------------Logged Error------------------');
 
         return null;

@@ -2,9 +2,9 @@ import { Router } from "express";
 
 import jwtAuthMiddleware from "../auth/jwtAuthMiddleware";
 
-import { controllerGetToken } from "../controllers/auth/authControllerGet";
-import { controllerPostToken } from "../controllers/auth/authControllerPost";
-import { controllerDeleteToken } from "../controllers/auth/authControllerDelete";
+import { controllerGetToken } from "../controllers/auth/authControllersGet";
+import { controllerPostToken } from "../controllers/auth/authControllersPost";
+import { controllerDeleteToken } from "../controllers/auth/authControllersDelete";
 
 const authRouter = Router();
 

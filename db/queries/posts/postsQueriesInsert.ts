@@ -14,6 +14,7 @@ export async function insertPost(title: string, normalizedTitle: string, descrip
         })
     } catch (error) {
         console.error('------------------Logged Error------------------');
+        console.error('Error occurred when attempting to insert post');
         console.error(error);
         console.error('------------------Logged Error------------------');
         return false;

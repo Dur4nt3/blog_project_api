@@ -17,6 +17,7 @@ export async function insertUser(
         });
     } catch (error) {
         console.error('------------------Logged Error------------------');
+        console.error('Error occurred when trying to create user');
         console.error(error);
         console.error('------------------Logged Error------------------');
         return false;

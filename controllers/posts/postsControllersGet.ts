@@ -1,16 +1,10 @@
 import type { Request, Response } from 'express';
 
-import isUserAuthor, { assumeAuthor } from '../utilities/isUserAuthor';
+import { assumeAuthor } from '../utilities/isUserAuthor';
 
 import { getAllUserPosts } from '../../db/queries/posts/postsQueriesSelect';
 
 export async function controllerGetOwnPosts(req: Request, res: Response) {
-    const authCheck = await isUserAuthor(req);
-
-    if (authCheck !== true) {
-        return res.status(authCheck.status).json(authCheck.json);
-    }
-
     assumeAuthor(req);
 
     const posts = await getAllUserPosts(req.user.userId);
