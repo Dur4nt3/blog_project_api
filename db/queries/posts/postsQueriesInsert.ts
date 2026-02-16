@@ -2,7 +2,6 @@ import { prisma } from "../../../lib/prisma";
 
 export async function insertPost(title: string, normalizedTitle: string, description: string, content: string, userId: number) {
     try {
-        console.log('creating post');
         const post = await prisma.post.create({
             data: {
                 title,

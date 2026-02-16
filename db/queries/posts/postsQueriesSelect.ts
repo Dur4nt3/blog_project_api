@@ -15,13 +15,35 @@ export async function getAllUserPosts(userId: number) {
         });
     } catch (error) {
         console.error('------------------Logged Error------------------');
-        console.error('Error occurred when querying user by id: ', userId);
+        console.error('Error occurred when querying post by user id: ', userId);
         console.error(error);
         console.error('------------------Logged Error------------------');
         posts = null;
     }
 
     return posts;
+}
+
+export async function getPostByPostId(postId: number) {
+    let post;
+    try {
+        post = await prisma.post.findUnique({
+            where: {
+                postId,
+            },
+            include: {
+                author: true,
+            },
+        });
+    } catch (error) {
+        console.error('------------------Logged Error------------------');
+        console.error('Error occurred when querying post by post id: ', postId);
+        console.error(error);
+        console.error('------------------Logged Error------------------');
+        post = null;
+    }
+
+    return post;
 }
 
 // ------------ SELECT QUERIES ------------
