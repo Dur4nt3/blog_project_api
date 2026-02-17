@@ -2,7 +2,10 @@ import { body } from 'express-validator';
 
 import normalizeTitle from '../../db/utilities/normalizeTitle';
 import { isUsernameUnique } from '../../db/queries/users/usersQueriesSelect';
-import { isTitleUnique } from '../../db/queries/posts/postsQueriesSelect';
+import {
+    isTitleUnique,
+    getPostByPostId,
+} from '../../db/queries/posts/postsQueriesSelect';
 
 import validateRole from './validateRole';
 
@@ -112,14 +115,31 @@ const validatePost = [
         10,
         70,
         titleError,
-    ).custom(async (title) => {
-        const normalizedTitle = normalizeTitle(title)
+    ).custom(async (title, { req }) => {
+        const normalizedTitle = normalizeTitle(title);
         const unique = await isTitleUnique(normalizedTitle);
         if (unique === true) {
             return true;
         }
 
         if (unique === false) {
+            if (req.method === 'PUT') {
+                const postId = req.params?.postId;
+                if (Number.isNaN(Number(postId)) === false) {
+                    const thisPost = await getPostByPostId(Number(postId));
+                    if (thisPost === null) {
+                        throw new Error('Could not validate title');
+                    }
+
+                    if (title === thisPost.title) {
+                        return true;
+                    }
+
+                    throw new Error('Title already exists');
+                }
+                throw new Error('Could not validate title');
+            }
+
             throw new Error('Title already exists');
         }
 
