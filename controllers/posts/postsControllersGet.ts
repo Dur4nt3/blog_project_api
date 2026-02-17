@@ -5,6 +5,8 @@ import { assumeAuthor } from '../utilities/isUserAuthor';
 import {
     getAllUserPosts,
     getPostByPostId,
+    getAllPosts,
+    getLatestPosts
 } from '../../db/queries/posts/postsQueriesSelect';
 
 export async function controllerGetOwnPosts(req: Request, res: Response) {
@@ -63,5 +65,22 @@ export async function controllerGetPost(req: Request, res: Response) {
             lastModification: post.lastModification,
         },
         name: post.author.name,
+    });
+}
+
+export async function controllerGetManyPosts(req: Request, res: Response) {
+    const requestedCount = req.query?.count;
+
+    let posts;
+
+    if (Number.isNaN(Number(requestedCount)) !== false) {
+        posts = await getLatestPosts(Number(requestedCount));
+    } else {
+        posts = await getAllPosts();
+    }
+
+    return res.json({
+        success: true,
+        posts,
     });
 }

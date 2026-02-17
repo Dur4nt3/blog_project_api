@@ -1,6 +1,53 @@
+import { Post } from '../../../generated/prisma/client';
 import { prisma } from '../../../lib/prisma';
 
 // ------------ SELECT QUERIES ------------
+
+// Implicitly returns posts with the latest being first
+export async function getAllPosts() {
+    let posts: Post[];
+    try {
+        posts = await prisma.post.findMany({
+            orderBy: {
+                createdAt: 'desc',
+            },
+            include: {
+                author: true,
+            },
+        });
+    } catch (error) {
+        console.error('------------------Logged Error------------------');
+        console.error('Error occurred when getting all posts');
+        console.error(error);
+        console.error('------------------Logged Error------------------');
+        posts = [];
+    }
+
+    return posts;
+}
+
+export async function getLatestPosts(count: number) {
+    let posts: Post[];
+    try {
+        posts = await prisma.post.findMany({
+            take: count,
+            orderBy: {
+                createdAt: 'desc',
+            },
+            include: {
+                author: true,
+            },
+        });
+    } catch (error) {
+        console.error('------------------Logged Error------------------');
+        console.error(`Error occurred when getting ${count} posts`);
+        console.error(error);
+        console.error('------------------Logged Error------------------');
+        posts = [];
+    }
+
+    return posts;
+}
 
 export async function getAllUserPosts(userId: number) {
     let posts;
