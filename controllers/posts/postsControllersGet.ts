@@ -73,7 +73,7 @@ export async function controllerGetManyPosts(req: Request, res: Response) {
 
     let posts;
 
-    if (Number.isNaN(Number(requestedCount)) !== false) {
+    if (Number.isNaN(Number(requestedCount)) === false) {
         posts = await getLatestPosts(Number(requestedCount));
     } else {
         posts = await getAllPosts();
