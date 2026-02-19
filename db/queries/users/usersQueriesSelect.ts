@@ -1,7 +1,5 @@
 import { prisma } from '../../../lib/prisma';
 
-import ROLE_POLICIES from '../../../auth/roles';
-
 // ------------ SELECT QUERIES ------------
 
 export async function getUserById(userId: number) {
@@ -13,6 +11,8 @@ export async function getUserById(userId: number) {
             },
             include: {
                 role: true,
+                comments: true,
+                posts: true,
             },
         });
     } catch (error) {

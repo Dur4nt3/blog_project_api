@@ -105,8 +105,6 @@ const validateSignup = [
     }),
 ];
 
-// /^[A-Za-z0-9.,:;?!\-"() ]+$/
-
 const validatePost = [
     identifierStringValidation(
         'Title',

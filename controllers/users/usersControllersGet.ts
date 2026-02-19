@@ -2,7 +2,7 @@ import type { Request, Response } from 'express';
 
 import ROLE_POLICIES from '../../auth/roles';
 
-// Update this with ROLE_POLICIES
+// Update the permissions returned with ROLE_POLICIES
 // This ensures this endpoint gets the reflects the latest permissions
 export function controllerGetUserPermissions(req: Request, res: Response) {
     const isAuthenticated = !!req.user;
@@ -31,4 +31,24 @@ export function controllerGetUserPermissions(req: Request, res: Response) {
             authorAccess: policy.authorAccess,
         },
     });
+}
+
+export function controllerGetUserDetails(req: Request, res: Response) {
+    const isAuthenticated = !!req.user;
+
+    if (!isAuthenticated || req.user === undefined) {
+        return res
+            .status(401)
+            .json({ success: false, message: 'Authentication required' });
+    }
+
+    return res.json({
+        success: true,
+        user: {
+            username: req.user.username,
+            name: req.user.name,
+            posts: req.user.posts,
+            comments: req.user.comments,
+        }
+    })
 }
