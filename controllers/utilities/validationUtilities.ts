@@ -10,11 +10,13 @@ import {
 import validateRole from './validateRole';
 
 const emptyErr = 'must not be empty';
+
 const passwordLengthErr = 'must be at least 8 characters long';
 const titleLengthErr = 'Title must be between 10 and 70 characters';
 const bodyLengthErr = 'must be between 500 and 10000 characters';
+
 const titleError =
-    'Title must only includes letters, numbers, spaces and basic punctuation only';
+    'must only includes letters, numbers, spaces and basic punctuation only';
 const alphaNumericErr =
     'must only contain letters and numbers (lowercase only)';
 const specialAlphaNumericErr = 'must only contain letters and numbers';
@@ -112,7 +114,7 @@ const validatePost = [
         /^[A-Za-z0-9.,:;?!\-"() ]+$/,
         10,
         70,
-        titleError,
+        `Title ${titleError}`,
     ).custom(async (title, { req }) => {
         const normalizedTitle = normalizeTitle(title);
         const unique = await isTitleUnique(normalizedTitle);
@@ -150,7 +152,7 @@ const validatePost = [
         /^[A-Za-z0-9.,:;?!\-"() ]+$/,
         100,
         300,
-        titleError,
+        `Description ${titleError}`,
     ),
 
     body('body')
@@ -161,4 +163,15 @@ const validatePost = [
         .withMessage(`Body ${bodyLengthErr}`),
 ];
 
-export { validateSignup, validatePost };
+const validateComment = [
+    identifierStringValidation(
+        'Comment',
+        'comment',
+        /^[A-Za-z0-9.,:;?!\-"() ]+$/,
+        10,
+        1000,
+        `Comment ${titleError}`,
+    ),
+];
+
+export { validateSignup, validatePost, validateComment };
