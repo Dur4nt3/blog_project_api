@@ -35,6 +35,8 @@ model Post {
   createdAt        DateTime @default(now())
   lastModification DateTime @default(now())
 
+  comments Comment[]
+
   userId Int
   author User @relation(fields: [userId], references: [userId])
 }
@@ -44,6 +46,9 @@ model Comment {
   content   String
   createdAt DateTime @default(now())
   edited    Boolean
+
+  postId Int
+  post Post @relation(fields: [postId], references: [postId])
 
   userId Int
   author User @relation(fields: [userId], references: [userId])

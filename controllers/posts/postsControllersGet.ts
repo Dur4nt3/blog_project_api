@@ -6,8 +6,9 @@ import {
     getAllUserPosts,
     getPostByPostId,
     getAllPosts,
-    getLatestPosts
+    getLatestPosts,
 } from '../../db/queries/posts/postsQueriesSelect';
+import { getPostComments } from '../../db/queries/comments/commentsQueriesSelect';
 
 export async function controllerGetOwnPosts(req: Request, res: Response) {
     assumeAuthor(req);
@@ -82,5 +83,21 @@ export async function controllerGetManyPosts(req: Request, res: Response) {
     return res.json({
         success: true,
         posts,
+    });
+}
+
+export async function controllerGetPostComments(req: Request, res: Response) {
+    const postId = req.params?.postId;
+
+    if (Number.isNaN(Number(postId)) === false) {
+        const comments = await getPostComments(Number(postId));
+        return res.json({
+            success: true,
+            comments,
+        });
+    }
+    return res.status(400).json({
+        success: false,
+        message: 'Invalid post ID!',
     });
 }
