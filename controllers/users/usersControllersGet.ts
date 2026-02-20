@@ -45,6 +45,7 @@ export function controllerGetUserDetails(req: Request, res: Response) {
     return res.json({
         success: true,
         user: {
+            userId: req.user.userId,
             username: req.user.username,
             name: req.user.name,
             posts: req.user.posts,

@@ -12,7 +12,11 @@ export async function getAllPosts() {
                 createdAt: 'desc',
             },
             include: {
-                author: true,
+                author: {
+                    select: {
+                        name: true,
+                    }
+                },
             },
         });
     } catch (error) {

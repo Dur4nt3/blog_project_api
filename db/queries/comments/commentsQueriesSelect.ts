@@ -11,7 +11,11 @@ export async function getPostComments(postId: number) {
                 postId,
             },
             include: {
-                author: true,
+                author: {
+                    select: {
+                        name: true,
+                    }
+                },
             },
         });
     } catch (error) {
