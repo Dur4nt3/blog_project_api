@@ -14,7 +14,7 @@ export async function getPostComments(postId: number) {
                 author: {
                     select: {
                         name: true,
-                    }
+                    },
                 },
             },
         });
@@ -33,3 +33,38 @@ export async function getPostComments(postId: number) {
 }
 
 // ------------ SELECT QUERIES ------------
+
+// ------------ SELECT QUERIES (VALIDATION ONLY) ------------
+
+export async function isUserCommentOwner(commentId: number, userId: number) {
+    try {
+        const comment = await prisma.comment.findUnique({
+            where: {
+                commentId,
+            },
+            select: {
+                commentId: true,
+                userId: true,
+            },
+        });
+
+        if (comment === null) {
+            return false;
+        }
+
+        return comment.userId === userId;
+    } catch (error) {
+        console.error('------------------Logged Error------------------');
+        console.error(
+            'Error occurred when checking comment ownership: ',
+            commentId,
+            userId,
+        );
+        console.error(error);
+        console.error('------------------Logged Error------------------');
+
+        return false;
+    }
+}
+
+// ------------ SELECT QUERIES (VALIDATION ONLY) ------------
