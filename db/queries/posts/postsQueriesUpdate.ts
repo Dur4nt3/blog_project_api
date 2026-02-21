@@ -1,6 +1,6 @@
 import { prisma } from '../../../lib/prisma';
 
-export async function UpdatePost(
+export async function updatePost(
     postId: number,
     title: string,
     normalizedTitle: string,

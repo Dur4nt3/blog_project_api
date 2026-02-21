@@ -16,7 +16,10 @@ import {
     controllerPostCreatePost,
     controllerPostCreateComment,
 } from '../controllers/posts/postsControllersPost';
-import { controllerPutUpdatePost } from '../controllers/posts/postsControllersPut';
+import {
+    controllerPutUpdatePost,
+    controllerPutUpdateComment,
+} from '../controllers/posts/postsControllersPut';
 import {
     controllerDeletePost,
     controllerDeleteComment,
@@ -84,6 +87,14 @@ postsRouter.post(
 // ------------- ALL COMMENTS -------------
 
 // ------------- SPECIFIC COMMENT -------------
+
+postsRouter.put(
+    '/:postId/comments/:commentId',
+    jwtAuthMiddleware,
+    authenticatedCheckMiddleware,
+    commentOwnerMiddleware,
+    controllerPutUpdateComment,
+);
 
 postsRouter.delete(
     '/:postId/comments/:commentId',
