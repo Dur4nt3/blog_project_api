@@ -1,6 +1,3 @@
-import path from 'path';
-import fs from 'fs';
-
 import type { Request } from 'express';
 
 import passport from 'passport';
@@ -8,10 +5,11 @@ import { Strategy as JwtStrategy, StrategyOptionsWithoutRequest } from 'passport
 
 import { getUserById } from '../db/queries/users/usersQueriesSelect';
 
-const __dirname = import.meta.dirname;
+if (process.env.PUBLIC_KEY === undefined) {
+    throw new Error('Public key not defined')
+}
 
-const pathToKey = path.join(__dirname, 'id_rsa_pub.pem');
-const PUB_KEY = fs.readFileSync(pathToKey, 'utf8');
+const PUB_KEY = process.env.PUBLIC_KEY;
 
 async function verifyCallback(payload: any, done: any) {
     try {

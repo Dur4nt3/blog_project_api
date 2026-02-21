@@ -1,11 +1,11 @@
-import path from 'path';
-import fs from 'fs';
 import jsonwebtoken from 'jsonwebtoken';
 
-const __dirname = import.meta.dirname;
 
-const pathToKey = path.join(__dirname, 'id_rsa_priv.pem');
-const PRIV_KEY = fs.readFileSync(pathToKey, 'utf8');
+if (process.env.PRIVATE_KEY === undefined) {
+    throw new Error('Private key not defined')
+}
+
+const PRIV_KEY = process.env.PRIVATE_KEY;
 
 export default function issueJWT(user: any) {
     const userId = user.userId;
