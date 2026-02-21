@@ -1,5 +1,6 @@
 import { Router } from 'express';
 
+import csrfCheckMiddleware from '../controllers/utilities/csrfCheckMiddleware';
 import jwtAuthMiddleware from '../auth/jwtAuthMiddleware';
 import authenticatedCheckMiddleware from '../controllers/utilities/authenticatedCheckMiddleware';
 import authorCheckMiddleware from '../controllers/utilities/authorCheckMiddleware';
@@ -33,6 +34,7 @@ postsRouter.get('/', controllerGetManyPosts);
 
 postsRouter.post(
     '/',
+    csrfCheckMiddleware,
     jwtAuthMiddleware,
     authorCheckMiddleware,
     controllerPostCreatePost,
@@ -44,6 +46,7 @@ postsRouter.post(
 
 postsRouter.get(
     '/me',
+    csrfCheckMiddleware,
     jwtAuthMiddleware,
     authorCheckMiddleware,
     controllerGetOwnPosts,
@@ -57,6 +60,7 @@ postsRouter.get('/:postId', controllerGetPost);
 
 postsRouter.put(
     '/:postId',
+    csrfCheckMiddleware,
     jwtAuthMiddleware,
     authorCheckMiddleware,
     postOwnerMiddleware,
@@ -65,6 +69,7 @@ postsRouter.put(
 
 postsRouter.delete(
     '/:postId',
+    csrfCheckMiddleware,
     jwtAuthMiddleware,
     authorCheckMiddleware,
     postOwnerMiddleware,
@@ -79,6 +84,7 @@ postsRouter.get('/:postId/comments', controllerGetPostComments);
 
 postsRouter.post(
     '/:postId/comments',
+    csrfCheckMiddleware,
     jwtAuthMiddleware,
     authenticatedCheckMiddleware,
     controllerPostCreateComment,
@@ -90,6 +96,7 @@ postsRouter.post(
 
 postsRouter.put(
     '/:postId/comments/:commentId',
+    csrfCheckMiddleware,
     jwtAuthMiddleware,
     authenticatedCheckMiddleware,
     commentOwnerMiddleware,
@@ -98,6 +105,7 @@ postsRouter.put(
 
 postsRouter.delete(
     '/:postId/comments/:commentId',
+    csrfCheckMiddleware,
     jwtAuthMiddleware,
     authenticatedCheckMiddleware,
     commentOwnerMiddleware,

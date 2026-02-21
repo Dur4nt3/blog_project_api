@@ -1,8 +1,9 @@
-import type { Request, Response } from "express";
+import crypto from 'node:crypto';
+import type { Request, Response } from 'express';
 
-import { getUserByUsername } from "../../db/queries/users/usersQueriesSelect";
-import { validatePassword } from "../../auth/passwordUtils";
-import issueJWT from "../../auth/issueJWT";
+import { getUserByUsername } from '../../db/queries/users/usersQueriesSelect';
+import { validatePassword } from '../../auth/passwordUtils';
+import issueJWT from '../../auth/issueJWT';
 
 export async function controllerPostToken(req: Request, res: Response) {
     const { username, password } = req.body;
@@ -26,12 +27,19 @@ export async function controllerPostToken(req: Request, res: Response) {
     }
 
     const jwt = issueJWT(user);
+    const csrfToken = crypto.randomBytes(24).toString("hex");
 
     return res
         .cookie('jwt', jwt.token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+            maxAge: 24 * 60 * 60 * 1000,
+        })
+        .cookie('csrfToken', csrfToken, {
+            httpOnly: false,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
             maxAge: 24 * 60 * 60 * 1000,
         })
         .json({

@@ -1,8 +1,7 @@
 import jsonwebtoken from 'jsonwebtoken';
 
-
 if (process.env.PRIVATE_KEY === undefined) {
-    throw new Error('Private key not defined')
+    throw new Error('Private key not defined');
 }
 
 const PRIV_KEY = process.env.PRIVATE_KEY;
@@ -14,7 +13,6 @@ export default function issueJWT(user: any) {
 
     const payload = {
         sub: userId,
-        iat: Date.now(),
     };
 
     const signedToken = jsonwebtoken.sign(payload, PRIV_KEY, {
