@@ -27,7 +27,7 @@ export async function controllerPostToken(req: Request, res: Response) {
     }
 
     const jwt = issueJWT(user);
-    const csrfToken = crypto.randomBytes(24).toString("hex");
+    const csrfToken = crypto.randomBytes(24).toString('hex');
 
     return res
         .cookie('jwt', jwt.token, {
@@ -45,5 +45,6 @@ export async function controllerPostToken(req: Request, res: Response) {
         .json({
             success: true,
             message: 'Login successful!',
+            csrfToken,
         });
 }
