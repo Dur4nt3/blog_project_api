@@ -15,6 +15,6 @@ usersRouter.get('/me', csrfCheckMiddleware, jwtAuthMiddleware, controllerGetUser
 usersRouter.get('/me/permissions', csrfCheckMiddleware, jwtAuthMiddleware, controllerGetUserPermissions);
 
 // Signup route
-usersRouter.post('/', csrfCheckMiddleware, controllerPostSignup);
+usersRouter.post('/', controllerPostSignup);
 
 export default usersRouter;
