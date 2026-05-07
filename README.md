@@ -15,6 +15,8 @@ For the reader application visit [this repository](https://github.com/Dur4nt3/bl
 
 For the author application visit [this repository](https://github.com/Dur4nt3/blog_project_author).
 
+For the project overview visit [this repository](https://github.com/Dur4nt3/blog_project_overview).
+
 ## Skills Demonstrated
 
 - REST API
